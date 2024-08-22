@@ -8,6 +8,25 @@ export class AlunoController {
     this.alunoService = new AlunoService();
   }
 
+  /**
+   * @swagger
+   * /alunos:
+   *   get:
+   *     summary: Retrieve a list of all students
+   *     tags:
+   *       - Aluno
+   *     responses:
+   *       200:
+   *         description: A list of students
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Aluno'
+   *       500:
+   *         description: Internal server error
+   */
   getAlunos = async (req: Request, res: Response) => {
     try {
       const alunos = await this.alunoService.getAllAlunos();

@@ -1,0 +1,57 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TreinoRepository = void 0;
+const client_1 = require("@prisma/client");
+class TreinoRepository {
+    constructor() {
+        this.prisma = new client_1.PrismaClient();
+    }
+    findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.prisma.treino.findMany({
+                include: { exercicios: true }, // Inclui os exercícios associados
+            });
+        });
+    }
+    findById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.prisma.treino.findUnique({
+                where: { id },
+                include: { exercicios: true },
+            });
+        });
+    }
+    save(treino) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.prisma.treino.create({
+                data: treino,
+            });
+        });
+    }
+    update(id, updatedTreino) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.prisma.treino.update({
+                where: { id },
+                data: updatedTreino,
+                include: { exercicios: true },
+            });
+        });
+    }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.prisma.treino.delete({
+                where: { id },
+            });
+        });
+    }
+}
+exports.TreinoRepository = TreinoRepository;

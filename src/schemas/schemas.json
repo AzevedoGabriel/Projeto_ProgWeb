@@ -1,0 +1,45 @@
+{
+    "Aluno": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "matricula": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string"
+            },
+            "idade": {
+                "type": "integer"
+            },
+            "professor": {
+                "$ref": "#/components/schemas/Professor"
+            },
+            "professorId": {
+                "type": "string"
+            }
+        }
+    },
+    "Professor": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "nome": {
+                "type": "string"
+            },
+            "idade": {
+                "type": "integer"
+            },
+            "alunos": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Aluno"
+                }
+            }
+        }
+    }
+}
