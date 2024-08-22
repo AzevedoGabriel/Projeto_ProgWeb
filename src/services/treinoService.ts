@@ -1,4 +1,4 @@
-import { Exercicio, Treino } from "@prisma/client";
+import { Treino, Exercicio } from "@prisma/client";
 import { TreinoRepository } from "../repositories/treinoRepository";
 import { ExercicioRepository } from "../repositories/exercicioRepository";
 
@@ -19,61 +19,82 @@ export class TreinoService {
     return this.treinoRepository.findById(id);
   }
 
-  async createTreino(treino: Omit<Treino, "id">): Promise<Treino> {
+  async createTreino(treino: {
+    nome: string;
+    descricao?: string;
+    data: Date;
+    duracao: number;
+  }): Promise<Treino> {
     return this.treinoRepository.save(treino);
   }
 
-  async updateTreino(
-    id: string,
-    updatedTreino: Partial<Treino>
-  ): Promise<Treino | null> {
-    return this.treinoRepository.update(id, updatedTreino);
+  async updateTreino(id: string, treinoData: {
+    nome?: string;
+    descricao?: string;
+    data?: Date;
+    duracao?: number;
+    exercicios?: {
+      id?: string;
+      nome?: string;
+      duracao?: number;
+      descanso?: number;
+    }[];
+  }): Promise<Treino | null> {
+    // Prepare data for update
+    const { nome, descricao, data, duracao, exercicios } = treinoData;
+
+    // Prepare data object
+    const dataToUpdate: {
+      nome?: string;
+      descricao?: string;
+      data?: Date;
+      duracao?: number;
+      exercicios?: {
+        id: string;
+        nome: string;
+        duracao: number;
+        descanso: number;
+      }[];
+    } = { nome, descricao, data, duracao };
+
+    if (exercicios) {
+      // Ensure each exercise has all required fields
+      const validExercicios = exercicios.filter(exercicio => 
+        exercicio.id && exercicio.nome && exercicio.duracao !== undefined && exercicio.descanso !== undefined
+      );
+
+      if (validExercicios.length > 0) {
+        dataToUpdate.exercicios = validExercicios.map(exercicio => ({
+          id: exercicio.id!,
+          nome: exercicio.nome!,
+          duracao: exercicio.duracao!,
+          descanso: exercicio.descanso!,
+        }));
+      }
+    }
+
+    return this.treinoRepository.update(id, dataToUpdate);
   }
 
   async deleteTreino(id: string): Promise<Treino | null> {
     return this.treinoRepository.delete(id);
   }
 
-  async calculateTotalDuration(treinoId: string): Promise<number> {
+  async addExerciciosToTreino(treinoId: string, exercicios: {
+    nome: string;
+    duracao: number;
+    descanso: number;
+  }[]): Promise<Treino | null> {
     const treino = await this.treinoRepository.findById(treinoId);
-    if (!treino) return 0;
+    if (!treino) return null;
 
-    const exercicios = treino.exercicios;
-    const totalDuration = exercicios.reduce((acc: any, exercicio: { duracao: any; descanso: any; }) => {
-      return acc + exercicio.duracao + exercicio.descanso;
-    }, 0);
+    for (const exercicio of exercicios) {
+      await this.exercicioRepository.save({
+        ...exercicio,
+        treinoId,
+      });
+    }
 
-    return totalDuration;
-  }
-}
-
-export class ExercicioService {
-  private exercicioRepository: ExercicioRepository;
-
-  constructor() {
-    this.exercicioRepository = new ExercicioRepository();
-  }
-
-  async getAllExercicios(): Promise<Exercicio[]> {
-    return this.exercicioRepository.findAll();
-  }
-
-  async getExercicioById(id: string): Promise<Exercicio | null> {
-    return this.exercicioRepository.findById(id);
-  }
-
-  async createExercicio(exercicio: Omit<Exercicio, "id">): Promise<Exercicio> {
-    return this.exercicioRepository.save(exercicio);
-  }
-
-  async updateExercicio(
-    id: string,
-    updatedExercicio: Partial<Exercicio>
-  ): Promise<Exercicio | null> {
-    return this.exercicioRepository.update(id, updatedExercicio);
-  }
-
-  async deleteExercicio(id: string): Promise<Exercicio | null> {
-    return this.exercicioRepository.delete(id);
+    return this.treinoRepository.findById(treinoId);
   }
 }

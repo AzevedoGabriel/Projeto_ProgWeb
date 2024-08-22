@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ExercicioService } from "../services/treinoService";
+import { ExercicioService } from "../services/exercicioService";
 
 export class ExercicioController {
   private exercicioService: ExercicioService;
@@ -8,6 +8,24 @@ export class ExercicioController {
     this.exercicioService = new ExercicioService();
   }
 
+  /**
+   * @swagger
+   * /exercicios:
+   *   get:
+   *     summary: Retorna todos os exercícios
+   *     tags: [Exercicio]
+   *     responses:
+   *       200:
+   *         description: Lista de todos os exercícios
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Exercicio'
+   *       500:
+   *         description: Erro ao buscar exercícios
+   */
   getExercicios = async (req: Request, res: Response) => {
     try {
       const exercicios = await this.exercicioService.getAllExercicios();
@@ -17,6 +35,31 @@ export class ExercicioController {
     }
   };
 
+  /**
+   * @swagger
+   * /exercicios/{id}:
+   *   get:
+   *     summary: Retorna um exercício pelo ID
+   *     tags: [Exercicio]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do exercício a ser buscado
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Exercício encontrado
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Exercicio'
+   *       404:
+   *         description: Exercício não encontrado
+   *       500:
+   *         description: Erro ao buscar exercício
+   */
   getExercicioById = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
@@ -30,6 +73,30 @@ export class ExercicioController {
     }
   };
 
+  /**
+   * @swagger
+   * /exercicios:
+   *   post:
+   *     summary: Cria um novo exercício
+   *     tags: [Exercicio]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Exercicio'
+   *     responses:
+   *       201:
+   *         description: Exercício criado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Exercicio'
+   *       400:
+   *         description: Dados incompletos
+   *       500:
+   *         description: Erro ao criar exercício
+   */
   createExercicio = async (req: Request, res: Response) => {
     const { nome, duracao, descanso, treinoId } = req.body;
     if (!nome || duracao === undefined || descanso === undefined || !treinoId) {
@@ -49,6 +116,37 @@ export class ExercicioController {
     }
   };
 
+  /**
+   * @swagger
+   * /exercicios/{id}:
+   *   put:
+   *     summary: Atualiza um exercício pelo ID
+   *     tags: [Exercicio]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do exercício a ser atualizado
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Exercicio'
+   *     responses:
+   *       200:
+   *         description: Exercício atualizado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Exercicio'
+   *       404:
+   *         description: Exercício não encontrado
+   *       500:
+   *         description: Erro ao atualizar exercício
+   */
   updateExercicio = async (req: Request, res: Response) => {
     const id = req.params.id;
     const { nome, duracao, descanso, treinoId } = req.body;
@@ -69,6 +167,27 @@ export class ExercicioController {
     }
   };
 
+  /**
+   * @swagger
+   * /exercicios/{id}:
+   *   delete:
+   *     summary: Deleta um exercício pelo ID
+   *     tags: [Exercicio]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do exercício a ser deletado
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Exercício deletado com sucesso
+   *       404:
+   *         description: Exercício não encontrado
+   *       500:
+   *         description: Erro ao deletar exercício
+   */
   deleteExercicio = async (req: Request, res: Response) => {
     const id = req.params.id;
 

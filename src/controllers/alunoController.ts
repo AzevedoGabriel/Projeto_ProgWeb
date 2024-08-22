@@ -23,7 +23,7 @@ export class AlunoController {
    *             schema:
    *               type: array
    *               items:
-   *                 $ref: '#/components/schemas/Aluno'
+   *                 $ref: './schemas/schemas.json#/Aluno'
    *       500:
    *         description: Internal server error
    */
@@ -36,6 +36,31 @@ export class AlunoController {
     }
   };
 
+  /**
+   * @swagger
+   * /alunos:
+   *   post:
+   *     summary: Create a new student
+   *     tags:
+   *       - Aluno
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: './schemas/schemas.json#/Aluno'
+   *     responses:
+   *       201:
+   *         description: Student created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Aluno'
+   *       400:
+   *         description: Invalid input
+   *       500:
+   *         description: Internal server error
+   */
   createAluno = async (req: Request, res: Response) => {
     const { matricula, name, idade, professorId } = req.body;
     if (!matricula || !name || !idade) {
@@ -47,7 +72,7 @@ export class AlunoController {
         matricula,
         name,
         idade,
-        professorId, // Opcional, pode ser nulo
+        professorId,
       });
       res.status(201).json(novoAluno);
     } catch (error) {
@@ -55,6 +80,38 @@ export class AlunoController {
     }
   };
 
+  /**
+   * @swagger
+   * /alunos/{id}:
+   *   put:
+   *     summary: Update an existing student
+   *     tags:
+   *       - Aluno
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: ID of the student to update
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: './schemas/schemas.json#/Aluno'
+   *     responses:
+   *       200:
+   *         description: Student updated successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Aluno'
+   *       404:
+   *         description: Student not found
+   *       500:
+   *         description: Internal server error
+   */
   updateAluno = async (req: Request, res: Response) => {
     const id = req.params.id;
     const { name, idade, professorId } = req.body;
@@ -63,7 +120,7 @@ export class AlunoController {
       const updatedAluno = await this.alunoService.updateAluno(id, {
         name,
         idade,
-        professorId, // Pode ser passado para alterar o professor
+        professorId,
       });
       if (!updatedAluno) {
         return res.status(404).json({ message: "Aluno não encontrado" });
@@ -74,6 +131,28 @@ export class AlunoController {
     }
   };
 
+  /**
+   * @swagger
+   * /alunos/{id}:
+   *   delete:
+   *     summary: Delete a student
+   *     tags:
+   *       - Aluno
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: ID of the student to delete
+   *     responses:
+   *       200:
+   *         description: Student deleted successfully
+   *       404:
+   *         description: Student not found
+   *       500:
+   *         description: Internal server error
+   */
   deleteAluno = async (req: Request, res: Response) => {
     const id = req.params.id;
 
@@ -88,6 +167,38 @@ export class AlunoController {
     }
   };
 
+  /**
+   * @swagger
+   * /alunos/assign:
+   *   post:
+   *     summary: Assign a professor to a student
+   *     tags:
+   *       - Aluno
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               alunoId:
+   *                 type: string
+   *                 description: ID of the student
+   *               professorId:
+   *                 type: string
+   *                 description: ID of the professor
+   *     responses:
+   *       200:
+   *         description: Professor assigned successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Aluno'
+   *       404:
+   *         description: Student or professor not found
+   *       500:
+   *         description: Internal server error
+   */
   assignProfessor = async (req: Request, res: Response) => {
     const { alunoId, professorId } = req.body;
 

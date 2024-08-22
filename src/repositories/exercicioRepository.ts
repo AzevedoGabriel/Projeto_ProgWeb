@@ -1,38 +1,47 @@
 import { PrismaClient, Exercicio } from "@prisma/client";
 
 export class ExercicioRepository {
-  private prisma: PrismaClient;
-
-  constructor() {
-    this.prisma = new PrismaClient();
-  }
+  private prisma = new PrismaClient();
 
   async findAll(): Promise<Exercicio[]> {
-    return this.prisma.exercicio.findMany({
-      include: { treino: true }, // Inclui o treino associado
-    });
+    return this.prisma.exercicio.findMany();
   }
 
   async findById(id: string): Promise<Exercicio | null> {
     return this.prisma.exercicio.findUnique({
       where: { id },
-      include: { treino: true }, // Inclui o treino associado
     });
   }
 
-  async save(exercicio: Omit<Exercicio, "id">): Promise<Exercicio> {
+  async findByTreinoId(treinoId: string): Promise<Exercicio[]> {
+    return this.prisma.exercicio.findMany({
+      where: { treinoId },
+    });
+  }
+
+  async save(exercicioData: {
+    nome: string;
+    duracao: number;
+    descanso: number;
+    treinoId: string;
+  }): Promise<Exercicio> {
     return this.prisma.exercicio.create({
-      data: exercicio,
+      data: exercicioData,
     });
   }
 
-  async update(
-    id: string,
-    updatedExercicio: Partial<Exercicio>
-  ): Promise<Exercicio | null> {
+  async update(id: string, exercicioData: {
+    nome?: string;
+    duracao?: number;
+    descanso?: number;
+  }): Promise<Exercicio | null> {
     return this.prisma.exercicio.update({
       where: { id },
-      data: updatedExercicio,
+      data: {
+        nome: exercicioData.nome,
+        duracao: exercicioData.duracao,
+        descanso: exercicioData.descanso,
+      },
     });
   }
 

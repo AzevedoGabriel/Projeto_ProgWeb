@@ -41,5 +41,68 @@
                 }
             }
         }
+    },
+    "Treino": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "O identificador único do treino"
+      },
+      "nome": {
+        "type": "string",
+        "description": "O nome do treino"
+      },
+      "descricao": {
+        "type": "string",
+        "description": "A descrição do treino",
+        "nullable": true
+      },
+      "data": {
+        "type": "string",
+        "format": "date-time",
+        "description": "A data em que o treino foi criado"
+      },
+      "duracao": {
+        "type": "integer",
+        "description": "A duração total do treino em minutos"
+      },
+      "exercicios": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Exercicio"
+        },
+        "description": "Lista de exercícios incluídos no treino"
+      }
     }
+  },
+  "Exercicio": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "O identificador único do exercício"
+      },
+      "nome": {
+        "type": "string",
+        "description": "O nome do exercício"
+      },
+      "duracao": {
+        "type": "integer",
+        "description": "A duração do exercício em minutos"
+      },
+      "descanso": {
+        "type": "integer",
+        "description": "O tempo de descanso após o exercício em minutos"
+      },
+      "treinoId": {
+        "type": "string",
+        "description": "O identificador do treino ao qual este exercício pertence"
+      },
+      "treino": {
+        "$ref": "#/components/schemas/Treino",
+        "description": "O treino associado a este exercício"
+      }
+    }
+  }
 }

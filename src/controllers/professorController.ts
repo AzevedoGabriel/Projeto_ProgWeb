@@ -8,6 +8,25 @@ export class ProfessorController {
     this.professorService = new ProfessorService();
   }
 
+  /**
+   * @swagger
+   * /professores:
+   *   get:
+   *     summary: Retrieve a list of all professors
+   *     tags:
+   *       - Professor
+   *     responses:
+   *       200:
+   *         description: A list of professors
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: './schemas/schemas.json#/Professor'
+   *       500:
+   *         description: Internal server error
+   */
   getProfessores = async (req: Request, res: Response) => {
     try {
       const professores = await this.professorService.getAllProfessores();
@@ -17,6 +36,32 @@ export class ProfessorController {
     }
   };
 
+  /**
+   * @swagger
+   * /professores/{id}:
+   *   get:
+   *     summary: Retrieve a professor by ID
+   *     tags:
+   *       - Professor
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: ID of the professor to retrieve
+   *     responses:
+   *       200:
+   *         description: Professor found
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Professor'
+   *       404:
+   *         description: Professor not found
+   *       500:
+   *         description: Internal server error
+   */
   getProfessorById = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
@@ -30,6 +75,31 @@ export class ProfessorController {
     }
   };
 
+  /**
+   * @swagger
+   * /professores:
+   *   post:
+   *     summary: Create a new professor
+   *     tags:
+   *       - Professor
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: './schemas/schemas.json#/Professor'
+   *     responses:
+   *       201:
+   *         description: Professor created successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Professor'
+   *       400:
+   *         description: Invalid input
+   *       500:
+   *         description: Internal server error
+   */
   createProfessor = async (req: Request, res: Response) => {
     const { nome, idade } = req.body;
     if (!nome || idade === undefined) {
@@ -47,6 +117,38 @@ export class ProfessorController {
     }
   };
 
+  /**
+   * @swagger
+   * /professores/{id}:
+   *   put:
+   *     summary: Update an existing professor
+   *     tags:
+   *       - Professor
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: ID of the professor to update
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: './schemas/schemas.json#/Professor'
+   *     responses:
+   *       200:
+   *         description: Professor updated successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: './schemas/schemas.json#/Professor'
+   *       404:
+   *         description: Professor not found
+   *       500:
+   *         description: Internal server error
+   */
   updateProfessor = async (req: Request, res: Response) => {
     const id = req.params.id;
     const { nome, idade } = req.body;
@@ -65,6 +167,28 @@ export class ProfessorController {
     }
   };
 
+  /**
+   * @swagger
+   * /professores/{id}:
+   *   delete:
+   *     summary: Delete a professor
+   *     tags:
+   *       - Professor
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: ID of the professor to delete
+   *     responses:
+   *       200:
+   *         description: Professor deleted successfully
+   *       404:
+   *         description: Professor not found
+   *       500:
+   *         description: Internal server error
+   */
   deleteProfessor = async (req: Request, res: Response) => {
     const id = req.params.id;
 

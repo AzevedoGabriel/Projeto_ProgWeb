@@ -8,6 +8,24 @@ export class TreinoController {
     this.treinoService = new TreinoService();
   }
 
+  /**
+   * @swagger
+   * /treinos:
+   *   get:
+   *     summary: Retorna todos os treinos
+   *     tags: [Treino]
+   *     responses:
+   *       200:
+   *         description: Lista de todos os treinos
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Treino'
+   *       500:
+   *         description: Erro ao buscar treinos
+   */
   getTreinos = async (req: Request, res: Response) => {
     try {
       const treinos = await this.treinoService.getAllTreinos();
@@ -17,6 +35,31 @@ export class TreinoController {
     }
   };
 
+  /**
+   * @swagger
+   * /treinos/{id}:
+   *   get:
+   *     summary: Retorna um treino pelo ID
+   *     tags: [Treino]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do treino a ser buscado
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Treino encontrado
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Treino'
+   *       404:
+   *         description: Treino não encontrado
+   *       500:
+   *         description: Erro ao buscar treino
+   */
   getTreinoById = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
@@ -30,6 +73,30 @@ export class TreinoController {
     }
   };
 
+  /**
+   * @swagger
+   * /treinos:
+   *   post:
+   *     summary: Cria um novo treino
+   *     tags: [Treino]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Treino'
+   *     responses:
+   *       201:
+   *         description: Treino criado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Treino'
+   *       400:
+   *         description: Dados incompletos
+   *       500:
+   *         description: Erro ao criar treino
+   */
   createTreino = async (req: Request, res: Response) => {
     const { nome, descricao, data, duracao, exercicios } = req.body;
     if (!nome || !data || duracao === undefined) {
@@ -50,6 +117,37 @@ export class TreinoController {
     }
   };
 
+  /**
+   * @swagger
+   * /treinos/{id}:
+   *   put:
+   *     summary: Atualiza um treino pelo ID
+   *     tags: [Treino]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do treino a ser atualizado
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Treino'
+   *     responses:
+   *       200:
+   *         description: Treino atualizado com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Treino'
+   *       404:
+   *         description: Treino não encontrado
+   *       500:
+   *         description: Erro ao atualizar treino
+   */
   updateTreino = async (req: Request, res: Response) => {
     const id = req.params.id;
     const { nome, descricao, data, duracao, exercicios } = req.body;
@@ -71,6 +169,27 @@ export class TreinoController {
     }
   };
 
+  /**
+   * @swagger
+   * /treinos/{id}:
+   *   delete:
+   *     summary: Deleta um treino pelo ID
+   *     tags: [Treino]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do treino a ser deletado
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Treino deletado com sucesso
+   *       404:
+   *         description: Treino não encontrado
+   *       500:
+   *         description: Erro ao deletar treino
+   */
   deleteTreino = async (req: Request, res: Response) => {
     const id = req.params.id;
 
@@ -85,6 +204,35 @@ export class TreinoController {
     }
   };
 
+  /**
+   * @swagger
+   * /treinos/{id}/duracao:
+   *   get:
+   *     summary: Calcula a duração total de um treino pelo ID
+   *     tags: [Treino]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         description: ID do treino para cálculo da duração
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Duração total do treino
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 totalDuration:
+   *                   type: integer
+   *                   description: Duração total do treino em minutos
+   *       404:
+   *         description: Treino não encontrado
+   *       500:
+   *         description: Erro ao calcular a duração do treino
+   */
   calculateTreinoDuration = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
