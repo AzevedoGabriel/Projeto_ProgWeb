@@ -1,108 +1,668 @@
 {
-    "Aluno": {
-        "type": "object",
-        "properties": {
-            "id": {
-                "type": "string"
-            },
-            "matricula": {
-                "type": "string"
-            },
-            "name": {
-                "type": "string"
-            },
-            "idade": {
-                "type": "integer"
-            },
-            "professor": {
-                "$ref": "#/components/schemas/Professor"
-            },
-            "professorId": {
-                "type": "string"
-            }
-        }
-    },
-    "Professor": {
-        "type": "object",
-        "properties": {
-            "id": {
-                "type": "string"
-            },
-            "nome": {
-                "type": "string"
-            },
-            "idade": {
-                "type": "integer"
-            },
-            "alunos": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/components/schemas/Aluno"
-                }
-            }
-        }
-    },
-    "Treino": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string",
-        "description": "O identificador único do treino"
-      },
-      "nome": {
-        "type": "string",
-        "description": "O nome do treino"
-      },
-      "descricao": {
-        "type": "string",
-        "description": "A descrição do treino",
-        "nullable": true
-      },
-      "data": {
-        "type": "string",
-        "format": "date-time",
-        "description": "A data em que o treino foi criado"
-      },
-      "duracao": {
-        "type": "integer",
-        "description": "A duração total do treino em minutos"
-      },
-      "exercicios": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Exercicio"
-        },
-        "description": "Lista de exercícios incluídos no treino"
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Documentation",
+    "description": "Documentation for Aluno, Professores, Treino, and Exercicio endpoints",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },
-  "Exercicio": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string",
-        "description": "O identificador único do exercício"
+  "paths": {
+    "/alunos": {
+      "get": {
+        "description": "Rota que busca todos os alunos",
+        "summary": "Busca de todos os alunos",
+        "tags": ["Aluno"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro ao buscar alunos"
+          }
+        }
       },
-      "nome": {
-        "type": "string",
-        "description": "O nome do exercício"
+      "post": {
+        "tags": ["Aluno"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "matricula": {
+                    "type": "string"
+                  },
+                  "curso": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "João Silva",
+                  "matricula": "202012345",
+                  "curso": "Ciência da Computação"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Aluno criado com sucesso"
+          },
+          "400": {
+            "description": "Dados incompletos"
+          },
+          "500": {
+            "description": "Erro ao criar aluno"
+          }
+        }
+      }
+    },
+    "/alunos/{id}": {
+      "get": {
+        "summary": "Busca de um aluno pelo ID",
+        "tags": ["Aluno"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do aluno a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aluno encontrado"
+          },
+          "404": {
+            "description": "Aluno não encontrado"
+          },
+          "500": {
+            "description": "Erro ao buscar aluno"
+          }
+        }
       },
-      "duracao": {
-        "type": "integer",
-        "description": "A duração do exercício em minutos"
+      "put": {
+        "summary": "Atualiza um aluno pelo ID",
+        "tags": ["Aluno"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do aluno a ser atualizado"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "matricula": {
+                    "type": "string"
+                  },
+                  "curso": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Aluno atualizado com sucesso"
+          },
+          "404": {
+            "description": "Aluno não encontrado"
+          },
+          "500": {
+            "description": "Erro ao atualizar aluno"
+          }
+        }
       },
-      "descanso": {
-        "type": "integer",
-        "description": "O tempo de descanso após o exercício em minutos"
+      "delete": {
+        "summary": "Deleta um aluno pelo ID",
+        "tags": ["Aluno"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do aluno a ser deletado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aluno deletado com sucesso"
+          },
+          "404": {
+            "description": "Aluno não encontrado"
+          },
+          "500": {
+            "description": "Erro ao deletar aluno"
+          }
+        }
+      }
+    },
+    "/professores": {
+      "get": {
+        "description": "Rota que busca todos os professores",
+        "summary": "Busca de todos os professores",
+        "tags": ["Professores"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro ao buscar professores"
+          }
+        }
       },
-      "treinoId": {
-        "type": "string",
-        "description": "O identificador do treino ao qual este exercício pertence"
+      "post": {
+        "tags": ["Professores"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "departamento": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Maria Oliveira",
+                  "departamento": "Matemática"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Professor criado com sucesso"
+          },
+          "400": {
+            "description": "Dados incompletos"
+          },
+          "500": {
+            "description": "Erro ao criar professor"
+          }
+        }
+      }
+    },
+    "/professores/{id}": {
+      "get": {
+        "summary": "Busca de um professor pelo ID",
+        "tags": ["Professores"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do professor a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Professor encontrado"
+          },
+          "404": {
+            "description": "Professor não encontrado"
+          },
+          "500": {
+            "description": "Erro ao buscar professor"
+          }
+        }
       },
-      "treino": {
-        "$ref": "#/components/schemas/Treino",
-        "description": "O treino associado a este exercício"
+      "put": {
+        "summary": "Atualiza um professor pelo ID",
+        "tags": ["Professores"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do professor a ser atualizado"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "departamento": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Professor atualizado com sucesso"
+          },
+          "404": {
+            "description": "Professor não encontrado"
+          },
+          "500": {
+            "description": "Erro ao atualizar professor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um professor pelo ID",
+        "tags": ["Professores"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do professor a ser deletado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Professor deletado com sucesso"
+          },
+          "404": {
+            "description": "Professor não encontrado"
+          },
+          "500": {
+            "description": "Erro ao deletar professor"
+          }
+        }
+      }
+    },
+    "/treinos": {
+      "get": {
+        "description": "Rota que busca todos os treinos",
+        "summary": "Busca de todos os treinos",
+        "tags": ["Treino"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro ao buscar treinos"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Treino"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "duracao": {
+                    "type": "number"
+                  },
+                  "exercicios": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "nome": {
+                          "type": "string"
+                        },
+                        "duracao": {
+                          "type": "number"
+                        },
+                        "descanso": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "nome": "Treino A",
+                  "descricao": "Treino focado em resistência",
+                  "data": "2024-08-22T14:00:00Z",
+                  "duracao": 60,
+                  "exercicios": [
+                    {
+                      "nome": "Agachamento",
+                      "duracao": 10,
+                      "descanso": 2
+                    },
+                    {
+                      "nome": "Flexão",
+                      "duracao": 10,
+                      "descanso": 2
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treino criado com sucesso"
+          },
+          "400": {
+            "description": "Dados incompletos"
+          },
+          "500": {
+            "description": "Erro ao criar treino"
+          }
+        }
+      }
+    },
+    "/treinos/{id}": {
+      "get": {
+        "summary": "Busca de um treino pelo ID",
+        "tags": ["Treino"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do treino a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treino encontrado"
+          },
+          "404": {
+            "description": "Treino não encontrado"
+          },
+          "500": {
+            "description": "Erro ao buscar treino"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza um treino pelo ID",
+        "tags": ["Treino"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do treino a ser atualizado"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "duracao": {
+                    "type": "number"
+                  },
+                  "exercicios": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "nome": {
+                          "type": "string"
+                        },
+                        "duracao": {
+                          "type": "number"
+                        },
+                        "descanso": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Treino atualizado com sucesso"
+          },
+          "404": {
+            "description": "Treino não encontrado"
+          },
+          "500": {
+            "description": "Erro ao atualizar treino"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um treino pelo ID",
+        "tags": ["Treino"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do treino a ser deletado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Treino deletado com sucesso"
+          },
+          "404": {
+            "description": "Treino não encontrado"
+          },
+          "500": {
+            "description": "Erro ao deletar treino"
+          }
+        }
+      }
+    },
+    "/exercicios": {
+      "get": {
+        "description": "Rota que busca todos os exercícios",
+        "summary": "Busca de todos os exercícios",
+        "tags": ["Exercicio"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Erro ao buscar exercícios"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Exercicio"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "duracao": {
+                    "type": "number"
+                  },
+                  "descanso": {
+                    "type": "number"
+                  },
+                  "treinoId": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nome": "Corrida",
+                  "duracao": 20,
+                  "descanso": 5,
+                  "treinoId": "abc123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exercício criado com sucesso"
+          },
+          "400": {
+            "description": "Dados incompletos"
+          },
+          "500": {
+            "description": "Erro ao criar exercício"
+          }
+        }
+      }
+    },
+    "/exercicios/{id}": {
+      "get": {
+        "summary": "Busca de um exercício pelo ID",
+        "tags": ["Exercicio"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do exercício a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exercício encontrado"
+          },
+          "404": {
+            "description": "Exercício não encontrado"
+          },
+          "500": {
+            "description": "Erro ao buscar exercício"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualiza um exercício pelo ID",
+        "tags": ["Exercicio"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do exercício a ser atualizado"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "duracao": {
+                    "type": "number"
+                  },
+                  "descanso": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exercício atualizado com sucesso"
+          },
+          "404": {
+            "description": "Exercício não encontrado"
+          },
+          "500": {
+            "description": "Erro ao atualizar exercício"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um exercício pelo ID",
+        "tags": ["Exercicio"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "ID do exercício a ser deletado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exercício deletado com sucesso"
+          },
+          "404": {
+            "description": "Exercício não encontrado"
+          },
+          "500": {
+            "description": "Erro ao deletar exercício"
+          }
+        }
       }
     }
   }
 }
+

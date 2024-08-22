@@ -1,10 +1,11 @@
 import express from "express"
 import alunoRoutes from "./routes/alunoRoutes"
+import swaggerUI from 'swagger-ui-express'
+import swaggerDocument from './schemas/schemas.json'
 
 const app = express()
 const port = 3000;
 
-const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 
 var swaggerDefinition = {
@@ -14,17 +15,17 @@ var swaggerDefinition = {
       description: "Documentação da API KyoGym",
   },
   components: {
-      schemas: require("./schemas.json")
+      schemas: require("./schemas/schemas.json")
   }
 }
 
 var options = {
   swaggerDefinition: swaggerDefinition,
-  apis: ["./routes/alunoRoutes.tsx"]
+  apis: ["./routes/alunoRoutes.ts"]
 }
 
 var swaggerSpec = swaggerJsDoc(options);
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(express.json())
 app.use(alunoRoutes)
