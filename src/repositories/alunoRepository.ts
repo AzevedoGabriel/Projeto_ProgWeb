@@ -8,12 +8,15 @@ export class AlunoRepository {
   }
 
   async findAll(): Promise<Aluno[]> {
-    return this.prisma.aluno.findMany();
+    return this.prisma.aluno.findMany({
+      include: { professor: true }, 
+    });
   }
 
   async findById(id: string): Promise<Aluno | null> {
     return this.prisma.aluno.findUnique({
       where: { id },
+      include: { professor: true }, 
     });
   }
 
@@ -30,6 +33,13 @@ export class AlunoRepository {
     return this.prisma.aluno.update({
       where: { id },
       data: updatedAluno,
+      include: { professor: true },
+    });
+  }
+
+  async delete(id: string): Promise<Aluno | null> {
+    return this.prisma.aluno.delete({
+      where: { id },
     });
   }
 }

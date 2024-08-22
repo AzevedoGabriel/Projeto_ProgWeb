@@ -17,5 +17,32 @@ model Aluno {
   id     String @id @default(uuid())
   matricula String @unique
   name   String
-  idade  Int 
+  idade  Int
+  professor  Professor? @relation(fields: [professorId], references: [id])
+  professorId String?  
+}
+
+model Professor {
+  id       String   @id @default(uuid()) 
+  nome     String   
+  idade    Int      
+  alunos   Aluno[]  
+}
+
+model Treino {
+  id          String      @id @default(uuid())
+  nome        String
+  descricao   String?
+  data        DateTime
+  duracao     Int        
+  exercicios  Exercicio[]
+}
+
+model Exercicio {
+  id          String      @id @default(uuid())
+  nome        String
+  duracao     Int         
+  descanso    Int         
+  treinoId    String
+  treino      Treino      @relation(fields: [treinoId], references: [id])
 }

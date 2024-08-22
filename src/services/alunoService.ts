@@ -1,4 +1,4 @@
-import { Aluno } from "@prisma/client"; // Importe o tipo Aluno do Prisma Client
+import { Aluno } from "@prisma/client";
 import { AlunoRepository } from "../repositories/alunoRepository";
 
 export class AlunoService {
@@ -25,5 +25,16 @@ export class AlunoService {
     updatedAluno: Partial<Aluno>
   ): Promise<Aluno | null> {
     return this.alunoRepository.update(id, updatedAluno);
+  }
+
+  async deleteAluno(id: string): Promise<Aluno | null> {
+    return this.alunoRepository.delete(id);
+  }
+
+  async assignProfessorToAluno(
+    alunoId: string,
+    professorId: string
+  ): Promise<Aluno | null> {
+    return this.alunoRepository.update(alunoId, { professorId });
   }
 }
