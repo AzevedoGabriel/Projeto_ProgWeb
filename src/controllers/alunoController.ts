@@ -1,11 +1,36 @@
 import { Request, Response } from "express";
 import { AlunoService } from "../services/alunoService";
+import { loginAluno, registerAluno } from "../services/authService";
 
 export class AlunoController {
   private alunoService: AlunoService;
 
   constructor() {
     this.alunoService = new AlunoService();
+  }
+
+  public async registerAluno(req: Request, res: Response): Promise<void> {
+    try {
+      const { matricula, name, idade, senha } = req.body;
+      const token = await registerAluno(matricula, name, idade, senha);
+      res.status(201).json({ token });
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
+      res.status(400).json({ message: err.message });
+    }
+  }
+
+  public async loginAluno(req: Request, res: Response): Promise<void> {
+    try {
+      const { matricula, senha } = req.body;
+      const token = await loginAluno(matricula, senha);
+      res.status(200).json({ token });
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
+      res.status(400).json({ message: err.message });
+    }
   }
 
   /**
@@ -30,7 +55,15 @@ export class AlunoController {
   getAlunos = async (req: Request, res: Response) => {
     try {
       const alunos = await this.alunoService.getAllAlunos();
-      res.json(alunos);
+      res.json(
+        alunos.map((aluno) => ({
+          id: aluno.id,
+          matricula: aluno.matricula,
+          nome: aluno.name,
+          senha: aluno.senha,
+          professorId: aluno.professorId,
+        }))
+      );
     } catch (error) {
       res.status(500).json({ message: "Erro ao buscar alunos" });
     }
@@ -62,16 +95,16 @@ export class AlunoController {
    *         description: Internal server error
    */
   createAluno = async (req: Request, res: Response) => {
-    const { matricula, name, idade, professorId } = req.body;
-    if (!matricula || !name || !idade) {
+    const { matricula, name, idade, senha, professorId } = req.body;
+    if (!matricula || !name || !idade || !senha) {
       return res.status(400).json({ message: "Dados incompletos" });
     }
-
     try {
       const novoAluno = await this.alunoService.createAluno({
         matricula,
         name,
         idade,
+        senha,
         professorId,
       });
       res.status(201).json(novoAluno);
@@ -114,13 +147,13 @@ export class AlunoController {
    */
   updateAluno = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { name, idade, professorId } = req.body;
-
+    const { name, idade, professorId, senha } = req.body;
     try {
       const updatedAluno = await this.alunoService.updateAluno(id, {
         name,
         idade,
         professorId,
+        senha,
       });
       if (!updatedAluno) {
         return res.status(404).json({ message: "Aluno não encontrado" });
@@ -130,7 +163,6 @@ export class AlunoController {
       res.status(500).json({ message: "Erro ao atualizar aluno" });
     }
   };
-
   /**
    * @swagger
    * /alunos/{id}:

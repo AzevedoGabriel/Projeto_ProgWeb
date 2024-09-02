@@ -46,12 +46,16 @@
                   },
                   "curso": {
                     "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
                   }
                 },
                 "example": {
                   "nome": "João Silva",
                   "matricula": "202012345",
-                  "curso": "Ciência da Computação"
+                  "curso": "Ciência da Computação",
+                  "senha": "senha123"
                 }
               }
             }
@@ -120,6 +124,9 @@
                     "type": "string"
                   },
                   "curso": {
+                    "type": "string"
+                  },
+                  "senha": {
                     "type": "string"
                   }
                 }
@@ -362,19 +369,14 @@
                 },
                 "example": {
                   "nome": "Treino A",
-                  "descricao": "Treino focado em resistência",
-                  "data": "2024-08-22T14:00:00Z",
+                  "descricao": "Treino para ganhar massa muscular",
+                  "data": "2024-09-01T10:00:00Z",
                   "duracao": 60,
                   "exercicios": [
                     {
                       "nome": "Agachamento",
-                      "duracao": 10,
-                      "descanso": 2
-                    },
-                    {
-                      "nome": "Flexão",
-                      "duracao": 10,
-                      "descanso": 2
+                      "duracao": 15,
+                      "descanso": 5
                     }
                   ]
                 }
@@ -541,16 +543,12 @@
                   },
                   "descanso": {
                     "type": "number"
-                  },
-                  "treinoId": {
-                    "type": "string"
                   }
                 },
                 "example": {
-                  "nome": "Corrida",
+                  "nome": "Flexão",
                   "duracao": 20,
-                  "descanso": 5,
-                  "treinoId": "abc123"
+                  "descanso": 10
                 }
               }
             }
@@ -665,4 +663,3 @@
     }
   }
 }
-

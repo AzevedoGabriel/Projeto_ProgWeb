@@ -20,6 +20,7 @@ model Aluno {
   idade  Int
   professor  Professor? @relation(fields: [professorId], references: [id])
   professorId String?  
+  senha String
 }
 
 model Professor {
