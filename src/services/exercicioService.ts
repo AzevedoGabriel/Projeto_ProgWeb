@@ -17,8 +17,6 @@ export class ExercicioService {
 
   async createExercicio(exercicioData: {
     nome: string;
-    duracao: number;
-    descanso: number;
     treinoId: string;
   }) {
     return this.exercicioRepository.save(exercicioData);
@@ -26,8 +24,6 @@ export class ExercicioService {
 
   async updateExercicio(id: string, exercicioData: {
     nome?: string;
-    duracao?: number;
-    descanso?: number;
   }) {
     return this.exercicioRepository.update(id, exercicioData);
   }

@@ -36,8 +36,6 @@ export class TreinoService {
     exercicios?: {
       id?: string;
       nome?: string;
-      duracao?: number;
-      descanso?: number;
     }[];
   }): Promise<Treino | null> {
     // Prepare data for update
@@ -52,23 +50,19 @@ export class TreinoService {
       exercicios?: {
         id: string;
         nome: string;
-        duracao: number;
-        descanso: number;
       }[];
     } = { nome, descricao, data, duracao };
 
     if (exercicios) {
       // Ensure each exercise has all required fields
       const validExercicios = exercicios.filter(exercicio => 
-        exercicio.id && exercicio.nome && exercicio.duracao !== undefined && exercicio.descanso !== undefined
+        exercicio.id && exercicio.nome
       );
 
       if (validExercicios.length > 0) {
         dataToUpdate.exercicios = validExercicios.map(exercicio => ({
           id: exercicio.id!,
           nome: exercicio.nome!,
-          duracao: exercicio.duracao!,
-          descanso: exercicio.descanso!,
         }));
       }
     }
@@ -82,8 +76,6 @@ export class TreinoService {
 
   async addExerciciosToTreino(treinoId: string, exercicios: {
     nome: string;
-    duracao: number;
-    descanso: number;
   }[]): Promise<Treino | null> {
     const treino = await this.treinoRepository.findById(treinoId);
     if (!treino) return null;
@@ -98,3 +90,6 @@ export class TreinoService {
     return this.treinoRepository.findById(treinoId);
   }
 }
+
+
+

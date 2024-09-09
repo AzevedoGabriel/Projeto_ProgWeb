@@ -108,8 +108,7 @@ export class TreinoController {
         nome,
         descricao,
         data,
-        duracao,
-        exercicios,
+        duracao
       });
       res.status(201).json(novoTreino);
     } catch (error) {
@@ -201,45 +200,6 @@ export class TreinoController {
       res.json({ message: "Treino deletado com sucesso" });
     } catch (error) {
       res.status(500).json({ message: "Erro ao deletar treino" });
-    }
-  };
-
-  /**
-   * @swagger
-   * /treinos/{id}/duracao:
-   *   get:
-   *     summary: Calcula a duração total de um treino pelo ID
-   *     tags: [Treino]
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         required: true
-   *         description: ID do treino para cálculo da duração
-   *         schema:
-   *           type: string
-   *     responses:
-   *       200:
-   *         description: Duração total do treino
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 totalDuration:
-   *                   type: integer
-   *                   description: Duração total do treino em minutos
-   *       404:
-   *         description: Treino não encontrado
-   *       500:
-   *         description: Erro ao calcular a duração do treino
-   */
-  calculateTreinoDuration = async (req: Request, res: Response) => {
-    const id = req.params.id;
-    try {
-      const totalDuration = await this.treinoService.calculateTotalDuration(id);
-      res.json({ totalDuration });
-    } catch (error) {
-      res.status(500).json({ message: "Erro ao calcular duração do treino" });
     }
   };
 }

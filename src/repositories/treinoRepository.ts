@@ -23,8 +23,6 @@ export class TreinoRepository {
     duracao: number;
     exercicios?: {
       nome: string;
-      duracao: number;
-      descanso: number;
     }[];
   }): Promise<Treino> {
     return this.prisma.treino.create({
@@ -35,9 +33,7 @@ export class TreinoRepository {
         duracao: treinoData.duracao,
         exercicios: {
           create: treinoData.exercicios?.map(exercicio => ({
-            nome: exercicio.nome,
-            duracao: exercicio.duracao,
-            descanso: exercicio.descanso,
+            nome: exercicio.nome
           })) || [],
         },
       },
@@ -52,8 +48,6 @@ export class TreinoRepository {
     exercicios?: {
       id: string;
       nome: string;
-      duracao: number;
-      descanso: number;
     }[];
   }): Promise<Treino | null> {
     const treino = await this.prisma.treino.findUnique({
@@ -83,17 +77,13 @@ export class TreinoRepository {
           await this.prisma.exercicio.update({
             where: { id: exercicio.id },
             data: {
-              nome: exercicio.nome,
-              duracao: exercicio.duracao,
-              descanso: exercicio.descanso,
+              nome: exercicio.nome
             },
           });
         } else {
           await this.prisma.exercicio.create({
             data: {
               nome: exercicio.nome,
-              duracao: exercicio.duracao,
-              descanso: exercicio.descanso,
               treinoId: id,
             },
           });

@@ -98,16 +98,14 @@ export class ExercicioController {
    *         description: Erro ao criar exercício
    */
   createExercicio = async (req: Request, res: Response) => {
-    const { nome, duracao, descanso, treinoId } = req.body;
-    if (!nome || duracao === undefined || descanso === undefined || !treinoId) {
+    const { nome, treinoId } = req.body;
+    if (!nome  === undefined) {
       return res.status(400).json({ message: "Dados incompletos" });
     }
 
     try {
       const novoExercicio = await this.exercicioService.createExercicio({
         nome,
-        duracao,
-        descanso,
         treinoId,
       });
       res.status(201).json(novoExercicio);
@@ -149,18 +147,18 @@ export class ExercicioController {
    */
   updateExercicio = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { nome, duracao, descanso, treinoId } = req.body;
+    const { nome } = req.body; // Remova treinoId aqui
 
     try {
+      // Certifique-se de que a função de serviço `updateExercicio` está atualizada
       const updatedExercicio = await this.exercicioService.updateExercicio(id, {
         nome,
-        duracao,
-        descanso,
-        treinoId,
       });
+
       if (!updatedExercicio) {
         return res.status(404).json({ message: "Exercício não encontrado" });
       }
+
       res.json(updatedExercicio);
     } catch (error) {
       res.status(500).json({ message: "Erro ao atualizar exercício" });

@@ -36,6 +36,8 @@ app.use(professorRoutes)
 app.use(exercicioRoutes)
 app.use(treinoRoutes)
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`)
 })
+
+export { app, server };

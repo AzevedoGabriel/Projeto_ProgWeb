@@ -36,14 +36,12 @@ model Treino {
   descricao   String?
   data        DateTime
   duracao     Int        
-  exercicios  Exercicio[]
+  exercicios  Exercicio[] @relation("TreinoExercicios")
 }
 
 model Exercicio {
   id          String      @id @default(uuid())
   nome        String
-  duracao     Int         
-  descanso    Int         
-  treinoId    String
-  treino      Treino      @relation(fields: [treinoId], references: [id])
+   treino      Treino?     @relation("TreinoExercicios", fields: [treinoId], references: [id])
+  treinoId    String?
 }

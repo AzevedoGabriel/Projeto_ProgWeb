@@ -21,8 +21,6 @@ export class ExercicioRepository {
 
   async save(exercicioData: {
     nome: string;
-    duracao: number;
-    descanso: number;
     treinoId: string;
   }): Promise<Exercicio> {
     return this.prisma.exercicio.create({
@@ -39,8 +37,6 @@ export class ExercicioRepository {
       where: { id },
       data: {
         nome: exercicioData.nome,
-        duracao: exercicioData.duracao,
-        descanso: exercicioData.descanso,
       },
     });
   }
