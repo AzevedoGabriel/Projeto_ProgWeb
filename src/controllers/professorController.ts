@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProfessorService } from "../services/professorService";
+import { loginProfessor, registerProfessor } from "../services/authService";
 
 export class ProfessorController {
   private professorService: ProfessorService;
@@ -7,6 +8,108 @@ export class ProfessorController {
   constructor() {
     this.professorService = new ProfessorService();
   }
+
+  /**
+   * @swagger
+   * /register-professor:
+   *   post:
+   *     summary: Register a new professor
+   *     tags:
+   *       - Professor
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               matricula:
+   *                 type: string
+   *               nome:
+   *                 type: string
+   *               idade:
+   *                 type: number
+   *               senha:
+   *                 type: string
+   *             required:
+   *               - matricula
+   *               - nome
+   *               - idade
+   *               - senha
+   *     responses:
+   *       201:
+   *         description: Professor registered successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 token:
+   *                   type: string
+   *       400:
+   *         description: Invalid input
+   *       500:
+   *         description: Internal server error
+   */
+  registerProfessor = async (req: Request, res: Response) => {
+    try {
+      const { matricula, nome, idade, senha } = req.body;
+      const token = await registerProfessor(matricula, nome, idade, senha);
+      res.status(201).json({ token });
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
+      res.status(400).json({ message: err.message });
+    }
+  };
+
+  /**
+   * @swagger
+   * /login-professor:
+   *   post:
+   *     summary: Login a professor
+   *     tags:
+   *       - Professor
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               matricula:
+   *                 type: string
+   *               senha:
+   *                 type: string
+   *             required:
+   *               - matricula
+   *               - senha
+   *     responses:
+   *       200:
+   *         description: Login successful
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 token:
+   *                   type: string
+   *       400:
+   *         description: Invalid credentials
+   *       500:
+   *         description: Internal server error
+   */
+  loginProfessor = async (req: Request, res: Response) => {
+    try {
+      const { matricula, senha } = req.body;
+      const token = await loginProfessor(matricula, senha);
+      res.json({ token });
+    } catch (error) {
+      const err = error as Error;
+      console.error(err.message);
+      res.status(400).json({ error: err.message });
+    }
+  };
 
   /**
    * @swagger
@@ -101,15 +204,17 @@ export class ProfessorController {
    *         description: Internal server error
    */
   createProfessor = async (req: Request, res: Response) => {
-    const { nome, idade } = req.body;
-    if (!nome || idade === undefined) {
+    const { matricula, nome, idade, senha } = req.body;
+    if (!matricula || !nome || idade === undefined || !senha) {
       return res.status(400).json({ message: "Dados incompletos" });
     }
 
     try {
       const novoProfessor = await this.professorService.createProfessor({
+        matricula,
         nome,
         idade,
+        senha,
       });
       res.status(201).json(novoProfessor);
     } catch (error) {
@@ -151,12 +256,14 @@ export class ProfessorController {
    */
   updateProfessor = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { nome, idade } = req.body;
+    const { matricula, nome, idade, senha } = req.body;
 
     try {
       const updatedProfessor = await this.professorService.updateProfessor(id, {
+        matricula,
         nome,
         idade,
+        senha,
       });
       if (!updatedProfessor) {
         return res.status(404).json({ message: "Professor não encontrado" });

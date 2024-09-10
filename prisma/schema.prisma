@@ -24,10 +24,12 @@ model Aluno {
 }
 
 model Professor {
-  id       String   @id @default(uuid()) 
+  id       String   @id @default(uuid())
+  matricula String @unique
   nome     String   
   idade    Int      
-  alunos   Aluno[]  
+  alunos   Aluno[]
+  senha String  
 }
 
 model Treino {

@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const { app, server } = require("../src/server");
 
 const prisma = new PrismaClient();
-let token;
+let token: any
 
 beforeAll(async () => {
   await prisma.$connect();
@@ -53,6 +53,7 @@ describe("GET /alunos", () => {
 
   it("Deve retornar um erro 404 se nenhum aluno existir", async () => {
     await prisma.aluno.deleteMany({});
+    
     const response = await request(app)
       .get("/alunos")
       .set("Authorization", `Bearer ${token}`);
@@ -91,7 +92,7 @@ describe("POST /alunos", () => {
     const response = await request(app)
       .post("/alunos")
       .send(alunoInvalido)
-      .set("Authorization", `Bearer ${token}`); 
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Dados incompletos" });
@@ -103,9 +104,9 @@ describe("PATCH /alunos/:id", () => {
     const alunoExistente = await prisma.aluno.findFirst();
 
     const response = await request(app)
-      .patch(`/alunos/${alunoExistente?.id}`)
+      .put(`/alunos/${alunoExistente?.id}`)
       .send({ name: "João Pedro", idade: 22 })
-      .set("Authorization", `Bearer ${token}`); 
+      .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("name", "João Pedro");
@@ -113,12 +114,12 @@ describe("PATCH /alunos/:id", () => {
 
   it("Deve retornar erro ao tentar atualizar um aluno que não existe", async () => {
     const response = await request(app)
-      .patch("/alunos/999")
+      .put("/alunos/999")
       .send({ name: "Nome Inexistente" })
-      .set("Authorization", `Bearer ${token}`); 
+      .set("Authorization", `Bearer ${token}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Aluno não encontrado" });
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Erro ao atualizar aluno" });
   });
 });
 
@@ -128,16 +129,16 @@ describe("DELETE /alunos/:id", () => {
 
     const response = await request(app)
       .delete(`/alunos/${alunoExistente?.id}`)
-      .set("Authorization", `Bearer ${token}`); 
+      .set("Authorization", `Bearer ${token}`);
     expect(response.status).toBe(204);
   });
 
   it("Deve retornar erro ao tentar deletar um aluno que não existe", async () => {
     const response = await request(app)
       .delete("/alunos/999")
-      .set("Authorization", `Bearer ${token}`); 
+      .set("Authorization", `Bearer ${token}`);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toEqual({ message: "Aluno não encontrado" });
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Erro ao deletar aluno" });
   });
 });

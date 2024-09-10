@@ -10,4 +10,7 @@ router.post("/professores", professorController.createProfessor);
 router.put("/professores/:id", professorController.updateProfessor);
 router.delete("/professores/:id", professorController.deleteProfessor);
 
+router.post("/register-professor", professorController.registerProfessor);
+router.post("/login-professor", professorController.loginProfessor);
+
 export default router;

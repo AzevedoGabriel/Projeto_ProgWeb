@@ -55,6 +55,11 @@ export class AlunoController {
   getAlunos = async (req: Request, res: Response) => {
     try {
       const alunos = await this.alunoService.getAllAlunos();
+
+      if (alunos.length === 0) {
+        return res.status(404).json({ message: "Nenhum aluno encontrado" });
+      }
+
       res.json(
         alunos.map((aluno) => ({
           id: aluno.id,
@@ -193,7 +198,7 @@ export class AlunoController {
       if (!deletedAluno) {
         return res.status(404).json({ message: "Aluno não encontrado" });
       }
-      res.json({ message: "Aluno deletado com sucesso" });
+      res.status(204).json({ message: "Aluno deletado com sucesso" });
     } catch (error) {
       res.status(500).json({ message: "Erro ao deletar aluno" });
     }

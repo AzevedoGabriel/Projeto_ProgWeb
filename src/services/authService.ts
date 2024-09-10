@@ -4,6 +4,36 @@ import { generateToken } from "../utils/jwt";
 
 const prisma = new PrismaClient();
 
+export const registerProfessor = async (
+  matricula: string,
+  nome: string,
+  idade: number,
+  senha: string
+) => {
+  const hashedSenha = await bcrypt.hash(senha, 10);
+  const professor = await prisma.professor.create({
+    data: {
+      matricula,
+      nome,
+      idade,
+      senha: hashedSenha,
+    },
+  });
+  return generateToken(professor.id);
+};
+
+export const loginProfessor = async (matricula: string, senha: string) => {
+  const professor = await prisma.professor.findUnique({
+    where: { matricula },
+  });
+  if (!professor) throw new Error("Professor não encontrado");
+
+  const isMatch = await bcrypt.compare(senha, professor.senha);
+  if (!isMatch) throw new Error("Senha inválida");
+
+  return generateToken(professor.id);
+};
+
 export const registerAluno = async (
   matricula: string,
   name: string,
