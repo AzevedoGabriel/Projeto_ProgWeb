@@ -1,0 +1,45 @@
+.login-container {
+  max-width: 500px; /* Aumenta a largura do container */
+  margin: 50px auto; /* Centraliza verticalmente e horizontalmente */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff; /* Fundo branco para contraste */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%; /* Largura total */
+  padding: 10px; /* Aumenta o padding para melhor usabilidade */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%; /* Botões ocupam a largura total */
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Cor do botão */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3; /* Efeito hover para o botão */
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+}
