@@ -22,9 +22,8 @@ const RegisterAluno = () => {
         senha,
       });
       const token = response.data.token;
-      // Armazenar o token, se necessário
       console.log(token);
-      navigate('/'); // Redirecionar para a tela de login
+      navigate('/');
     } catch (err) {
       setError('Registro falhou. Verifique os dados inseridos.');
       console.error(err);
