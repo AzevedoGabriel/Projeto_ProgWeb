@@ -1,11 +1,11 @@
 .login-container {
-  max-width: 500px; /* Aumenta a largura do container */
-  margin: 50px auto; /* Centraliza verticalmente e horizontalmente */
+  max-width: 500px; 
+  margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff; /* Fundo branco para contraste */
+  background-color: #fff; 
 }
 
 .form-group {
@@ -18,25 +18,25 @@
 }
 
 .form-group input {
-  width: 100%; /* Largura total */
-  padding: 10px; /* Aumenta o padding para melhor usabilidade */
+  width: 100%; 
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 button {
-  width: 100%; /* Botões ocupam a largura total */
+  width: 100%; 
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff; /* Cor do botão */
+  background-color: #007bff; 
   color: white;
   font-size: 16px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3; /* Efeito hover para o botão */
+  background-color: #0056b3;
 }
 
 .error-message {
