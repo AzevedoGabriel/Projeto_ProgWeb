@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Importa o CSS que você criou
+import './Login.css';
 
 const Login = () => {
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Hook para redirecionar
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,9 +16,8 @@ const Login = () => {
         matricula,
         senha,
       });
-      // Armazene o token em localStorage ou em um estado global
-      localStorage.setItem('token', response.data.token); // Armazena o token
-      navigate('/alunos'); // Redireciona para a página de alunos
+      localStorage.setItem('token', response.data.token);
+      navigate('/alunos');
     } catch (err) {
       setError('Login falhou. Verifique sua matrícula e senha.');
       console.error(err);
@@ -26,7 +25,7 @@ const Login = () => {
   };
 
   const handleRegister = () => {
-    navigate('/register-aluno'); // Redireciona para a página de registro
+    navigate('/register-aluno');
   };
 
   const handleAlunos = () => {
