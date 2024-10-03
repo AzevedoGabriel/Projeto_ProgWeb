@@ -57,9 +57,7 @@ export class ProfessorController {
       const token = await registerProfessor(matricula, nome, idade, senha);
       res.status(201).json({ token });
     } catch (error) {
-      const err = error as Error;
-      console.error(err.message);
-      res.status(400).json({ message: err.message });
+      res.status(400).json({ message: 'erro ao registrar' });
     }
   };
 

@@ -13,7 +13,6 @@ beforeAll(async () => {
     matricula: "121212",
     nome: "Carlos Silva",
     idade: 40,
-    alunos: [],
     senha: "123456"
   });
 
