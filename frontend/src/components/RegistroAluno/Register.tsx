@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 
-const RegisterAluno = () => {
+const Register = () => {
   const [matricula, setMatricula] = useState('');
   const [name, setNome] = useState('');
   const [idade, setIdade] = useState('');
@@ -58,7 +58,7 @@ const RegisterAluno = () => {
         <div className="mb-3">
           <label className="form-label">Idade</label>
           <input
-            type="number"
+            type="text"
             className="form-control"
             value={idade}
             onChange={(e) => setIdade(e.target.value)}
@@ -81,4 +81,4 @@ const RegisterAluno = () => {
   );
 };
 
-export default RegisterAluno;
+export default Register;

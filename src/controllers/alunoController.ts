@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AlunoService } from "../services/alunoService";
 import { loginAluno, registerAluno } from "../services/authService";
+ import bcrypt from "bcrypt";
 
 export class AlunoController {
   private alunoService: AlunoService;
@@ -9,17 +10,20 @@ export class AlunoController {
     this.alunoService = new AlunoService();
   }
 
-  public async registerAluno(req: Request, res: Response): Promise<void> {
-    try {
-      const { matricula, name, idade, senha } = req.body;
-      const token = await registerAluno(matricula, name, idade, senha);
-      res.status(201).json({ token });
-    } catch (error) {
-      const err = error as Error;
-      console.error(err.message);
-      res.status(400).json({ message: err.message });
-    }
+public async registerAluno(req: Request, res: Response): Promise<void> {
+  try {
+    const { matricula, name, idade, senha } = req.body;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(senha, saltRounds);
+    const token = await registerAluno(matricula, name, idade, hashedPassword);
+    res.status(201).json({ token });
+  } catch (error) {
+    const err = error as Error;
+    console.error(err.message);
+    res.status(400).json({ message: err.message });
   }
+}
+
 
   public async loginAluno(req: Request, res: Response): Promise<void> {
     try {
