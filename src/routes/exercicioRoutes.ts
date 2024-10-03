@@ -6,7 +6,7 @@ const exercicioController = new ExercicioController();
 
 router.get("/exercicios", exercicioController.getExercicios);
 router.get("/exercicios/:id", exercicioController.getExercicioById);
-router.post("/exercicios", exercicioController.createExercicio);
+router.post("/cadastra-exercicio", exercicioController.createExercicio);
 router.put("/exercicios/:id", exercicioController.updateExercicio);
 router.delete("/exercicios/:id", exercicioController.deleteExercicio);
 
