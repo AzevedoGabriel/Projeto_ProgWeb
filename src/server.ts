@@ -9,6 +9,10 @@ import swaggerDocument from './schemas/schemas.json'
 const app = express()
 const port = 3000;
 
+const cors = require('cors');
+app.use(cors());
+
+
 const swaggerJsDoc = require("swagger-jsdoc");
 
 var swaggerDefinition = {
