@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export const registerProfessor = async (
   matricula: string,
   nome: string,
-  idade: number,
+  idade: string,
   senha: string
 ) => {
   const hashedSenha = await bcrypt.hash(senha, 10);
@@ -37,7 +37,7 @@ export const loginProfessor = async (matricula: string, senha: string) => {
 export const registerAluno = async (
   matricula: string,
   name: string,
-  idade: number,
+  idade: string,
   senha: string
 ) => {
   const hashedSenha = await bcrypt.hash(senha, 10);

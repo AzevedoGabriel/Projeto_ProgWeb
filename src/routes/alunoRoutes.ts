@@ -6,16 +6,10 @@ import authMiddleware from "../middlewares/authMiddleware";
 const router = Router();
 const alunoController = new AlunoController();
 
-router.get("/alunos", authMiddleware, alunoController.getAlunos);
-router.post("/alunos", authMiddleware, alunoController.createAluno);
-router.put("/alunos/:id", authMiddleware, alunoController.updateAluno);
-router.delete("/alunos/:id", authMiddleware, alunoController.deleteAluno);
-
-router.post(
-  "/alunos/assign-professor",
-  authMiddleware,
-  alunoController.assignProfessor
-);
+router.get("/listagem-alunos", alunoController.getAlunos);
+router.post("/alunos", alunoController.createAluno);
+router.put("/alunos/:id", alunoController.updateAluno);
+router.delete("/delete-alunos/:id", alunoController.deleteAluno);
 
 router.post("/register-aluno", async (req, res) => {
   try {

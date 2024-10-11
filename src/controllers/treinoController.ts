@@ -98,8 +98,8 @@ export class TreinoController {
    *         description: Erro ao criar treino
    */
   createTreino = async (req: Request, res: Response) => {
-    const { nome, descricao, data, duracao, exercicios } = req.body;
-    if (!nome || !data || duracao === undefined) {
+    const { nome, descricao, duracao } = req.body;
+    if (!nome || !duracao === undefined) {
       return res.status(400).json({ message: "Dados incompletos" });
     }
 
@@ -107,8 +107,7 @@ export class TreinoController {
       const novoTreino = await this.treinoService.createTreino({
         nome,
         descricao,
-        data,
-        duracao
+        duracao,
       });
       res.status(201).json(novoTreino);
     } catch (error) {
@@ -149,15 +148,13 @@ export class TreinoController {
    */
   updateTreino = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { nome, descricao, data, duracao, exercicios } = req.body;
+    const { nome, descricao, duracao } = req.body;
 
     try {
       const updatedTreino = await this.treinoService.updateTreino(id, {
         nome,
         descricao,
-        data,
         duracao,
-        exercicios,
       });
       if (!updatedTreino) {
         return res.status(404).json({ message: "Treino não encontrado" });

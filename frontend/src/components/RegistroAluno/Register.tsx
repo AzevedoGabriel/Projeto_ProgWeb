@@ -1,40 +1,35 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-
-const Register = () => {
-  const [matricula, setMatricula] = useState('');
-  const [name, setNome] = useState('');
-  const [idade, setIdade] = useState('');
-  const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
+const CadastraAluno = () => {
+  const [matricula, setMatricula] = useState("");
+  const [name, setName] = useState("");
+  const [idade, setIdade] = useState("");
+  const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post('http://localhost:3000/register-aluno', {
+      await axios.post("http://localhost:3000/alunos", {
         matricula,
         name,
-        idade: Number(idade),
+        idade,
         senha,
       });
-      const token = response.data.token;
-      console.log(token);
-      navigate('/');
-    } catch (err) {
-      setError('Registro falhou. Verifique os dados inseridos.');
-      console.error(err);
+
+      navigate("/listagem-aluno");
+    } catch (error) {
+      console.error("Erro ao cadastrar aluno", error);
     }
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <h2>Cadastrar Aluno</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Matrícula</label>
           <input
@@ -51,7 +46,7 @@ const Register = () => {
             type="text"
             className="form-control"
             value={name}
-            onChange={(e) => setNome(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
@@ -75,10 +70,12 @@ const Register = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Cadastrar</button>
+        <button type="submit" className="btn btn-primary">
+          Cadastrar
+        </button>
       </form>
     </div>
   );
 };
 
-export default Register;
+export default CadastraAluno;

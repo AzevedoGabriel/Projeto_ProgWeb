@@ -70,7 +70,6 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
           matricula: aluno.matricula,
           nome: aluno.name,
           senha: aluno.senha,
-          professorId: aluno.professorId,
         }))
       );
     } catch (error) {
@@ -104,7 +103,7 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
    *         description: Internal server error
    */
   createAluno = async (req: Request, res: Response) => {
-    const { matricula, name, idade, senha, professorId } = req.body;
+    const { matricula, name, idade, senha} = req.body;
     if (!matricula || !name || !idade || !senha) {
       return res.status(400).json({ message: "Dados incompletos" });
     }
@@ -113,8 +112,7 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
         matricula,
         name,
         idade,
-        senha,
-        professorId,
+        senha
       });
       res.status(201).json(novoAluno);
     } catch (error) {
@@ -156,12 +154,11 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
    */
   updateAluno = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const { name, idade, professorId, senha } = req.body;
+    const { name, idade, senha } = req.body;
     try {
       const updatedAluno = await this.alunoService.updateAluno(id, {
         name,
         idade,
-        professorId,
         senha,
       });
       if (!updatedAluno) {
@@ -240,6 +237,8 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
    *       500:
    *         description: Internal server error
    */
+
+   /**
   assignProfessor = async (req: Request, res: Response) => {
     const { alunoId, professorId } = req.body;
 
@@ -258,4 +257,5 @@ public async registerAluno(req: Request, res: Response): Promise<void> {
       res.status(500).json({ message: "Erro ao atribuir professor ao aluno" });
     }
   };
+  */
 }

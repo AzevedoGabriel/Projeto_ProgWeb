@@ -8,15 +8,12 @@ export class ProfessorRepository {
   }
 
   async findAll(): Promise<Professor[]> {
-    return this.prisma.professor.findMany({
-      include: { alunos: true }, // Inclui os alunos associados ao professor
-    });
+    return this.prisma.professor.findMany({});
   }
 
   async findById(id: string): Promise<Professor | null> {
     return this.prisma.professor.findUnique({
-      where: { id },
-      include: { alunos: true }, // Inclui os alunos associados ao professor
+      where: { id }
     });
   }
 

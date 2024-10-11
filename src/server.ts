@@ -1,7 +1,6 @@
 import express from "express"
 import alunoRoutes from "./routes/alunoRoutes"
 import professorRoutes from './routes/professorRoutes'
-import exercicioRoutes from './routes/exercicioRoutes'
 import treinoRoutes from './routes/treinoRoutes'
 import swaggerUI from 'swagger-ui-express'
 import swaggerDocument from './schemas/schemas.json'
@@ -37,7 +36,6 @@ app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(express.json())
 app.use(alunoRoutes)
 app.use(professorRoutes)
-app.use(exercicioRoutes)
 app.use(treinoRoutes)
 
 const server = app.listen(port, () => {

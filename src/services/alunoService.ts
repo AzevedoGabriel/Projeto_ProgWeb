@@ -19,7 +19,7 @@ export class AlunoService {
   async createAluno(aluno: Omit<Aluno, "id">): Promise<Aluno> {
     return this.alunoRepository.save(aluno);
   }
-
+  
   async updateAluno(
     id: string,
     updatedAluno: Partial<Aluno>
@@ -31,10 +31,11 @@ export class AlunoService {
     return this.alunoRepository.delete(id);
   }
 
+  /**
   async assignProfessorToAluno(
-    alunoId: string,
-    professorId: string
+    alunoId: string
   ): Promise<Aluno | null> {
-    return this.alunoRepository.update(alunoId, { professorId });
+    return this.alunoRepository.update(alunoId);
   }
+     */
 }
